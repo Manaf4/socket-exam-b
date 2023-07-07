@@ -16,11 +16,7 @@ public class ClientHandler implements Runnable{
     private BufferedWriter bufferedWriter;
     private String clientUsername;
 
-    private void displayLastAddedUser() {
-        IMember iMember = new MembreImpl();
-        Membre lastAddedUser = iMember.lastMembre();
-        System.out.println("Dernier utilisateur ajouté : " + lastAddedUser.getUsername());
-    }
+
 
 
     public ClientHandler(Socket socket){
@@ -30,12 +26,16 @@ public class ClientHandler implements Runnable{
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = bufferedReader.readLine();
             clientHandlers.add(this);
+            //System.out.println(clientHandlers.size());
 //            displayLastAddedUser();
             broadcastMessage("SERVER : " + clientUsername + " est entré dans le chat");
         }catch (IOException e){
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+//    public static int nombreDeClient() {
+//        return clientHandlers.size();
+//    }
 
     @Override
     public void run() {

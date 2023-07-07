@@ -61,7 +61,7 @@ public class MembreImpl implements IMember {
         }catch(Exception exception){
             exception.printStackTrace();
         }
-        System.out.println(membre.getUsername());
+        //System.out.println(membre.getUsername());
 
         return membre;
     }

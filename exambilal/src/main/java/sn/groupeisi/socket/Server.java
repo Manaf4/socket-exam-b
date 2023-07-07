@@ -11,29 +11,33 @@ import java.net.Socket;
 
 public class Server {
     private ServerSocket serverSocket;
-    private int cpt;
+    private int connectionCount; // Compteur de connexions
     private String lastAddedUsername;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
+        this.connectionCount = 0; // Initialise le compteur à 0
     }
 
     public void startServer() {
         IMember iMember = new MembreImpl();
         try {
-            while (!serverSocket.isClosed()) {
+            while (!serverSocket.isClosed() && connectionCount < 4) {
                 Socket socket = serverSocket.accept();
-
-                // Créer un nouveau gestionnaire de client uniquement si la connexion est établie
                 if (socket.isConnected()) {
+                    connectionCount++; // Incrémente le compteur à chaque connexion acceptée
+
                     Membre membre = iMember.lastMembre();
                     lastAddedUsername = membre.getUsername();
-                    System.out.println(membre.getIdM());
-                    System.out.println(lastAddedUsername + " Vient de se connecter");
+                    System.out.println(lastAddedUsername + " vient de se connecter");
+
                     ClientHandler clientHandler = new ClientHandler(socket);
                     Thread thread = new Thread(clientHandler);
                     thread.start();
                 }
+            }
+            if (connectionCount >= 4) {
+                System.out.println("serveur plein...");
             }
         } catch (IOException e) {
             e.printStackTrace();
