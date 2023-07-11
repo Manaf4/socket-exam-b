@@ -1,6 +1,5 @@
 package sn.groupeisi.socket;
 
-import sn.groupeisi.dao.IMembre;
 import sn.groupeisi.entities.IMember;
 import sn.groupeisi.entities.Membre;
 import sn.groupeisi.entities.MembreImpl;
@@ -20,6 +19,7 @@ public class Server {
     }
 
     public void startServer() {
+        System.out.println("serveur en attente...");
         IMember iMember = new MembreImpl();
         try {
             while (!serverSocket.isClosed() && connectionCount < 4) {
@@ -57,5 +57,6 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(1234);
         Server server = new Server(serverSocket);
         server.startServer();
+//        System.out.println("serveur demarre...");
     }
 }

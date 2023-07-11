@@ -23,6 +23,11 @@ public class Membre implements Serializable {
         this.commentaires = commentaires;
     }
 
+    public Membre(int idM, String username) {
+        this.idM = idM;
+        this.username = username;
+    }
+
     public int getIdM() {
         return idM;
     }

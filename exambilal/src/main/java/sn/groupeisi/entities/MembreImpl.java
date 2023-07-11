@@ -26,6 +26,56 @@ public class MembreImpl implements IMember {
         }
         return ok;
     }
+    public Membre getMembreById(int membreId) {
+        Membre membre = null;
+
+        String sql = "SELECT * FROM membre WHERE idM = ?";
+        try {
+            db.initPrepar(sql);
+            db.getPstm().setInt(1, membreId);
+            rs = db.executeSelect();
+
+            if (rs.next()) {
+                int idM = rs.getInt("idM");
+                String username = rs.getString("username");
+                // Autres colonnes à récupérer
+
+                // Créez l'objet Membre correspondant
+                membre = new Membre(idM, username);
+                // Set autres attributs du membre si nécessaire
+            }
+
+            db.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return membre;
+    }
+
+    public Membre getMembreByUsername(String username) {
+        Membre membre = null;
+        String sql = "SELECT * FROM membre WHERE username = ?";
+
+        try {
+            db.initPrepar(sql);
+            db.getPstm().setString(1, username);
+            rs = db.executeSelect();
+
+            if (rs.next()) {
+                membre = new Membre();
+                membre.setIdM(rs.getInt("idM"));
+                membre.setUsername(rs.getString("username"));
+            }
+
+            db.closeConnection();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+
+        return membre;
+    }
+
 
     public List<Membre> membreList(){
         List<Membre> membres = new ArrayList<>();

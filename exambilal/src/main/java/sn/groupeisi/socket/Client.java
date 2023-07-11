@@ -45,9 +45,20 @@ public class Client {
 
             while(socket.isConnected()){
                 String messageToSend = scanner.nextLine();
+
+                if (messageToSend.equalsIgnoreCase("/quit")) {
+                    bufferedWriter.write(messageToSend);
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                    System.out.println("Bye vous avez quitte le chat");
+                    closeEverything(socket, bufferedReader, bufferedWriter);
+                    break;
+                }
+
                 bufferedWriter.write(username + " : " + messageToSend);
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
+
             }
         }catch (IOException e){
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -62,6 +73,11 @@ public class Client {
                 while (socket.isConnected()){
                     try {
                         msgFromGroupChat = bufferedReader.readLine();
+                        if (msgFromGroupChat == null || msgFromGroupChat.equals("/quit")) {
+                            closeEverything(socket, bufferedReader, bufferedWriter);
+                            break;
+                        }
+
                         System.out.println(msgFromGroupChat);
                     }catch (IOException e){
                         closeEverything(socket, bufferedReader, bufferedWriter);
@@ -100,7 +116,7 @@ public class Client {
             int ok = iMember.addMember(membre);
             Socket socket = new Socket("localhost", 1234);
             Client client = new Client(socket, username);
-
+            System.out.println("Vous venez de vous connecter au serveur d'isi");
             client.listenForMessage();
             client.sendMessage();
         }catch (Exception e){
